@@ -47,10 +47,14 @@ class StatisticsPanel extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
+          Flexible(
+            child: Text(
+              label,
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
+          const SizedBox(width: 8),
           Text(
             value,
             style: const TextStyle(
@@ -70,10 +74,14 @@ class StatisticsPanel extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            task,
-            style: const TextStyle(color: Colors.white60, fontSize: 11),
+          Flexible(
+            child: Text(
+              task,
+              style: const TextStyle(color: Colors.white60, fontSize: 11),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
+          const SizedBox(width: 8),
           Text(
             count.toString(),
             style: const TextStyle(

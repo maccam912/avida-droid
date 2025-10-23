@@ -8,6 +8,9 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const AvidaDroidApp());
 
+    // Wait for all animations and async operations to complete
+    await tester.pumpAndSettle();
+
     // Verify that the app bar contains the title
     expect(find.text('Avida-Droid'), findsOneWidget);
   });
