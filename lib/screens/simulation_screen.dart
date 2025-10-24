@@ -106,118 +106,135 @@ class _SimulationScreenState extends State<SimulationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.grey.shade900,
-        title: const Text('Avida-Droid', style: TextStyle(color: Colors.white)),
-        actions: [
-          IconButton(
-            icon: Icon(isRunning ? Icons.pause : Icons.play_arrow, color: Colors.white),
-            onPressed: toggleSimulation,
-            tooltip: isRunning ? 'Pause' : 'Play',
-          ),
-          IconButton(
-            icon: const Icon(Icons.skip_next, color: Colors.white),
-            onPressed: isRunning ? null : stepSimulation,
-            tooltip: 'Step',
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: resetSimulation,
-            tooltip: 'Reset',
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
-            onPressed: () => _showSettingsDialog(context),
-            tooltip: 'Settings',
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Control panel
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.grey.shade900,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    const Text('Speed:', style: TextStyle(color: Colors.white)),
-                    Expanded(
-                      child: Slider(
-                        value: speed,
-                        min: 1,
-                        max: 100,
-                        divisions: 99,
-                        label: '${speed.round()} ups',
-                        onChanged: changeSpeed,
-                      ),
-                    ),
-                    Text('${speed.round()} ups',
-                        style: const TextStyle(color: Colors.white)),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text('Mutation:', style: TextStyle(color: Colors.white)),
-                    Expanded(
-                      child: Slider(
-                        value: world.mutationRate,
-                        min: 0,
-                        max: 0.05,
-                        divisions: 100,
-                        label: '${(world.mutationRate * 100).toStringAsFixed(1)}%',
-                        onChanged: changeMutationRate,
-                      ),
-                    ),
-                    Text('${(world.mutationRate * 100).toStringAsFixed(2)}%',
-                        style: const TextStyle(color: Colors.white)),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text('Color:', style: TextStyle(color: Colors.white)),
-                    const SizedBox(width: 8),
-                    _buildColorModeButton('Lineage', 'lineage'),
-                    _buildColorModeButton('Fitness', 'fitness'),
-                    _buildColorModeButton('Age', 'age'),
-                    _buildColorModeButton('Generation', 'generation'),
-                    _buildColorModeButton('Tasks', 'tasks'),
-                  ],
-                ),
-              ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.grey.shade900,
+          title: const Text('Avida-Droid', style: TextStyle(color: Colors.white)),
+          actions: [
+            IconButton(
+              icon: Icon(isRunning ? Icons.pause : Icons.play_arrow, color: Colors.white),
+              onPressed: toggleSimulation,
+              tooltip: isRunning ? 'Pause' : 'Play',
             ),
+            IconButton(
+              icon: const Icon(Icons.skip_next, color: Colors.white),
+              onPressed: isRunning ? null : stepSimulation,
+              tooltip: 'Step',
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              onPressed: resetSimulation,
+              tooltip: 'Reset',
+            ),
+            IconButton(
+              icon: const Icon(Icons.settings, color: Colors.white),
+              onPressed: () => _showSettingsDialog(context),
+              tooltip: 'Settings',
+            ),
+          ],
+          bottom: const TabBar(
+            indicatorColor: Colors.blue,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white60,
+            tabs: [
+              Tab(icon: Icon(Icons.grid_on), text: 'Grid'),
+              Tab(icon: Icon(Icons.bar_chart), text: 'Stats'),
+              Tab(icon: Icon(Icons.tune), text: 'Controls'),
+            ],
           ),
-          // Main content
-          Expanded(
-            child: Row(
-              children: [
-                // World grid
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    margin: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white24),
-                    ),
-                    child: WorldGridWidget(
-                      world: world,
-                      colorMode: colorMode,
-                      onCellTap: onCellTap,
-                    ),
+        ),
+        body: TabBarView(
+          children: [
+            // Grid tab
+            Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white24),
+              ),
+              child: WorldGridWidget(
+                world: world,
+                colorMode: colorMode,
+                onCellTap: onCellTap,
+              ),
+            ),
+            // Statistics tab
+            StatisticsPanel(stats: world.stats),
+            // Controls tab
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Simulation Speed',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                ),
-                // Statistics panel
-                SizedBox(
-                  width: 200,
-                  child: StatisticsPanel(stats: world.stats),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Text('Speed:', style: TextStyle(color: Colors.white)),
+                      Expanded(
+                        child: Slider(
+                          value: speed,
+                          min: 1,
+                          max: 100,
+                          divisions: 99,
+                          label: '${speed.round()} ups',
+                          onChanged: changeSpeed,
+                        ),
+                      ),
+                      Text('${speed.round()} ups',
+                          style: const TextStyle(color: Colors.white)),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Mutation Rate',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Text('Mutation:', style: TextStyle(color: Colors.white)),
+                      Expanded(
+                        child: Slider(
+                          value: world.mutationRate,
+                          min: 0,
+                          max: 0.05,
+                          divisions: 100,
+                          label: '${(world.mutationRate * 100).toStringAsFixed(1)}%',
+                          onChanged: changeMutationRate,
+                        ),
+                      ),
+                      Text('${(world.mutationRate * 100).toStringAsFixed(2)}%',
+                          style: const TextStyle(color: Colors.white)),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Color Mode',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _buildColorModeButton('Lineage', 'lineage'),
+                      _buildColorModeButton('Fitness', 'fitness'),
+                      _buildColorModeButton('Age', 'age'),
+                      _buildColorModeButton('Generation', 'generation'),
+                      _buildColorModeButton('Tasks', 'tasks'),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
