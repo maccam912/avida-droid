@@ -21,10 +21,11 @@ class World {
   }
 
   void _initialize() {
-    // Seed every cell with a random organism
+    // Seed with viable ancestor organisms that can self-replicate
+    // This matches real Avida which starts with a working replicator
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        grid[y][x] = Organism.createRandom();
+        grid[y][x] = Organism.createAncestor();
       }
     }
     stats.reset();
@@ -120,6 +121,14 @@ class World {
       // Execute based on merit (more merit = more CPU cycles)
       final cpuCycles = max(1, organism.merit ~/ 10);
       final offspring = organism.execute(cpuCycles, mutationRate);
+
+      // Check for death by energy starvation (matches real Avida)
+      if (organism.merit <= 0) {
+        grid[pos.y][pos.x] = null;
+        deaths++;
+        aliveCount--;
+        continue; // Skip reproduction and age checks for dead organism
+      }
 
       // Handle reproduction
       if (offspring != null) {
