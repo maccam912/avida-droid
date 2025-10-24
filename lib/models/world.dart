@@ -21,10 +21,12 @@ class World {
   }
 
   void _initialize() {
-    // Place ancestor in center
-    final centerX = width ~/ 2;
-    final centerY = height ~/ 2;
-    grid[centerY][centerX] = Organism.createAncestor();
+    // Seed every cell with a random organism
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        grid[y][x] = Organism.createRandom();
+      }
+    }
     stats.reset();
   }
 

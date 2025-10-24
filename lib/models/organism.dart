@@ -30,6 +30,19 @@ class Organism {
     return Organism(genome);
   }
 
+  // Create organism with random genome
+  static Organism createRandom({int genomeLength = 50}) {
+    final random = Random();
+    final genome = List<Instruction>.generate(
+      genomeLength,
+      (_) {
+        final randomType = InstructionType.values[random.nextInt(InstructionType.values.length)];
+        return Instruction(randomType);
+      },
+    );
+    return Organism(genome);
+  }
+
   // Execute N instructions
   Organism? execute(int steps, double mutationRate) {
     for (int i = 0; i < steps; i++) {
