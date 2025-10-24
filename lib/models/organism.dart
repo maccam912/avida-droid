@@ -6,10 +6,11 @@ class Organism {
   List<Instruction> genome;
   CPU cpu;
   int age = 0;
-  int merit = 100; // CPU cycles allocated
+  int merit = 1000; // Energy/merit pool (was 100, increased to allow reproduction)
   int fitness = 100;
   int generation = 0;
   int childCount = 0;
+  int gestationTime = 0; // Time since last reproduction
 
   // Task completion tracking
   final Set<String> completedTasks = {};
@@ -47,6 +48,16 @@ class Organism {
   Organism? execute(int steps, double mutationRate) {
     for (int i = 0; i < steps; i++) {
       age++;
+      gestationTime++;
+
+      // Consume merit/energy for each instruction executed
+      // This matches real Avida where organisms use resources over time
+      merit--;
+
+      // Death by energy starvation
+      if (merit <= 0) {
+        return null;
+      }
 
       if (genome.isEmpty) break;
 
@@ -138,6 +149,21 @@ class Organism {
     // Create offspring
     final child = Organism(childGenome, generation: generation + 1);
     child.hue = (hue + random.nextDouble() * 30 - 15) % 360; // Similar color to parent
+
+    // Update fitness based on gestation time (matches real Avida)
+    // Faster reproduction = higher fitness
+    if (gestationTime > 0) {
+      fitness = (1000 * 100) ~/ gestationTime; // Base merit / gestation time
+    }
+
+    // Split merit between parent and child (matches real Avida resource distribution)
+    // Parent keeps half, child gets half of parent's current merit
+    final childMerit = merit ~/ 2;
+    merit = merit - childMerit;
+    child.merit = childMerit;
+
+    // Reset gestation timer
+    gestationTime = 0;
 
     // Reset parent's CPU for next reproduction
     cpu.offspring.clear();
