@@ -40,6 +40,19 @@ class World {
     grid[y][x] = organism;
   }
 
+  // Get all organisms in the world
+  List<Organism> get organisms {
+    final List<Organism> result = [];
+    for (final row in grid) {
+      for (final org in row) {
+        if (org != null) {
+          result.add(org);
+        }
+      }
+    }
+    return result;
+  }
+
   // Find empty adjacent cell
   Point<int>? findEmptyAdjacent(int x, int y) {
     final positions = [

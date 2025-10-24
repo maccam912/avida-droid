@@ -270,7 +270,7 @@ class CPU {
       // Biological operations
       case InstructionType.hAlloc:
         allocatedSize = max(1, min(registers[Register.ax] ?? 50, genome.length * 2));
-        offspring = List<Instruction>.filled(allocatedSize, const Instruction(InstructionType.nopA));
+        offspring = List<Instruction>.filled(allocatedSize, const Instruction(InstructionType.nopA), growable: true);
         break;
 
       case InstructionType.hCopy:

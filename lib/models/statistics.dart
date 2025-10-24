@@ -27,8 +27,8 @@ class Statistics {
     required double averageGenomeLength,
     required Map<String, int> taskCounts,
   }) {
-    updates = updates;
-    population = population;
+    this.updates = updates;
+    this.population = population;
     totalBirths += births;
     totalDeaths += deaths;
     this.averageAge = averageAge;
