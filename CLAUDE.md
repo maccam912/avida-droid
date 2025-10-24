@@ -48,6 +48,16 @@ echo "  flutter run        - Run the app"
 
 ## Development Workflow
 
+### Before Finishing Any Task
+
+**ALWAYS** run `flutter analyze` before considering a task complete:
+
+```bash
+flutter analyze
+```
+
+This command checks for code quality issues, unused variables, and other potential problems. All warnings and errors must be addressed before finishing.
+
 ### Running Tests
 
 ```bash

@@ -126,7 +126,6 @@ void main() {
 
       // Record initial state
       final initialUpdates = world.updates;
-      final initialPopulation = world.organisms.length;
 
       // Run several updates
       for (int i = 0; i < 10; i++) {
