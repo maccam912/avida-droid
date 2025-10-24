@@ -4,38 +4,46 @@ This document provides setup instructions and development guidelines for working
 
 ## First-Time Setup
 
-### 1. Set Up Flutter
+### Set Up Flutter
 
-Run the setup script to install Flutter and dependencies:
-
-```bash
-chmod +x setup-flutter.sh
-./setup-flutter.sh
-```
-
-This script will:
-- Install Flutter SDK (if not already installed)
-- Add Flutter to your PATH
-- Run Flutter doctor to verify installation
-- Get all project dependencies
-
-### 2. Manual Setup (Alternative)
-
-If you prefer to set up manually:
+Run these commands to install Flutter and set up the project:
 
 ```bash
-# Install Flutter
-git clone https://github.com/flutter/flutter.git -b stable --depth 1 ~/flutter
-export PATH="$PATH:$HOME/flutter/bin"
+# Check if Flutter is already installed
+if ! command -v flutter &> /dev/null; then
+    echo "Flutter not found. Installing Flutter..."
 
-# Navigate to project
+    # Download and install Flutter (stable branch)
+    cd ~
+    git clone https://github.com/flutter/flutter.git -b stable --depth 1
+
+    # Add Flutter to PATH for this session
+    export PATH="$PATH:$HOME/flutter/bin"
+
+    # Add to bashrc for persistence
+    if ! grep -q "flutter/bin" ~/.bashrc; then
+        echo 'export PATH="$PATH:$HOME/flutter/bin"' >> ~/.bashrc
+    fi
+
+    echo "Flutter installed successfully!"
+else
+    echo "Flutter is already installed."
+fi
+
+# Run Flutter doctor to verify setup and show what needs to be configured
+echo "Running Flutter doctor to verify installation..."
+flutter doctor
+
+# Navigate to project directory and get dependencies
+echo "Getting Flutter dependencies..."
 cd /home/user/avida-droid
-
-# Get dependencies
 flutter pub get
 
-# Verify setup
-flutter doctor
+echo "Flutter setup complete!"
+echo "You can now run:"
+echo "  flutter test       - Run tests"
+echo "  flutter analyze    - Analyze code"
+echo "  flutter run        - Run the app"
 ```
 
 ## Development Workflow
