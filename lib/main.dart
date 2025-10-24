@@ -5,10 +5,10 @@ import 'screens/simulation_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Force landscape orientation for better viewing
+  // Force portrait orientation for mobile viewing
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
   ]);
 
   runApp(const AvidaDroidApp());
