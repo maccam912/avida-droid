@@ -24,9 +24,10 @@ class Organism {
   }
 
   // Create default ancestor organism
-  // Simplified version: "wzcagcccccccccccccccccccccccccccccccccccccczvfcaxgab"
+  // Original Avida default-heads.org ancestor (50 instructions)
+  // w=h-alloc, y=h-search, c=nop-C, a=nop-A, g=mov-head, v=h-copy, f=if-label, x=h-divide, b=nop-B
   static Organism createAncestor() {
-    const ancestorGenome = "wzcagcccccccccccccccccccccccccccccccccccccczvfcaxgab";
+    const ancestorGenome = "wycagccccccccccccccccccccccccccccccccccccyvfcaxgab";
     final genome = ancestorGenome.split('').map((c) => Instruction.fromLetter(c)).toList();
     return Organism(genome);
   }
