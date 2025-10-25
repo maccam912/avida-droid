@@ -90,7 +90,6 @@ class World {
   // Single update step
   void update() {
     updates++;
-    int aliveCount = 0;
     int births = 0;
     int deaths = 0;
 
@@ -110,8 +109,6 @@ class World {
       final organism = grid[pos.y][pos.x];
       if (organism == null) continue;
 
-      aliveCount++;
-
       // Give organism random inputs for task checking
       if (organism.cpu.inputBuffer.isEmpty) {
         organism.cpu.inputBuffer.add(random.nextInt(0xFFFF));
@@ -126,7 +123,6 @@ class World {
       if (organism.merit <= 0) {
         grid[pos.y][pos.x] = null;
         deaths++;
-        aliveCount--;
         continue; // Skip reproduction and age checks for dead organism
       }
 
@@ -147,14 +143,13 @@ class World {
       if (organism.age > organism.genome.length * 20) {
         grid[pos.y][pos.x] = null;
         deaths++;
-        aliveCount--;
       }
     }
 
-    // Update statistics
+    // Update statistics - count actual population after all updates
     stats.update(
       updates: updates,
-      population: aliveCount,
+      population: organisms.length,
       births: births,
       deaths: deaths,
       averageAge: _calculateAverageAge(),
